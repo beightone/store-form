@@ -6,12 +6,10 @@ import { IOMessage } from 'vtex.native-types'
 import {
   Button,
   IconClose,
-  IconImage,
-  Input,
+  // Input,
   Spinner,
-  IconCaretDown,
 } from 'vtex.styleguide'
-
+import { IconDownLoad } from '../img'
 import StyleButton from './StyleButton'
 import UploadFileMutation from '../../graphql/uploadFile.graphql'
 import { FormRawInputProps, InputTypes } from '../../typings/InputProps'
@@ -21,7 +19,7 @@ interface MutationData {
   uploadFile: { fileUrl: string }
 }
 
-const MAX_SIZE = 4 * 1024 * 1024
+const MAX_SIZE = 45 * 1024 * 1024
 
 const messages = defineMessages({
   titleLabel: {
@@ -107,18 +105,21 @@ const InputUpload = (props: FormRawInputProps & { accept?: string }) => {
 
   return (
     <div className="vtex-styleguide-9-x-dropdown vtex-dropdown" ref={ref}>
-      <span className="db mb3 w-100 c-on-base t-small">
-        <IOMessage id={messages.titleLabel.id} />
-      </span>
       <StyleButton
         title={intl.formatMessage({ id: 'store/form.add-document.title' })}
         active={isOpen}
         onToggle={() => setIsOpen(!isOpen)}
         style={null}
         label={
-          <div className="flex flex-row justify-between items-center w-100 pa4">
-            <IconImage />
-            <IconCaretDown size={8} />
+          <div className="flex justify-between items-center w-100 pa4">
+            <IconDownLoad />
+            <span className="vtex-textInput flex flex-col">
+              <strong className="vtex-textInputStrong">
+                Selecione o arquivo
+              </strong>
+
+              ou busque o arquivo
+            </span>
           </div>
         }
       />
@@ -132,29 +133,12 @@ const InputUpload = (props: FormRawInputProps & { accept?: string }) => {
           )}
 
           <div className={`flex flex-column ${isLoading && 'o-20'}`}>
-            <div className="mb4">
-              <Input
-                label={intl.formatMessage({
-                  id: 'store/form.add-document.label',
-                })}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setImageUrl(e.target.value)
-                }}
-                placeholder={intl.formatMessage({
-                  id: 'store/form.add-document.placeholder',
-                })}
-              />
-            </div>
-
             <Button onClick={handleAddImage} size="small" disabled={!imageUrl}>
               <IOMessage id={messages.add.id} />
             </Button>
 
             <div className="flex flex-column">
-              <span className="db mb3 w-100 c-on-base t-small">
-                <IOMessage id={messages.uploadLabel.id} />
-              </span>
-              <div {...getRootProps()} className="flex flex-column">
+              <div {...getRootProps()} className="flex mt3 flex-column">
                 <input {...getInputProps()} />
                 <Button size="small">
                   <IOMessage id={messages.uploadButton.id} />
